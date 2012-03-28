@@ -1,0 +1,1 @@
+Usage: QuickDiff [--check-dates] [--full-diff] src-path dst-path
