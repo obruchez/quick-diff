@@ -23,36 +23,51 @@ h1. General structure
 
 h2. Diffs
 
-The Diffs case class simply contains the differences between two paths grouped into several sub-groups (see README for a description of the sub-groups).
+The _Diffs_ case class simply contains the differences between two paths grouped into several sub-groups (see README for a description of the sub-groups).
 
 It contains three small methods:
 
-* noDifference: to return a boolean value indicating if the two paths contain differences or not
-* toStrings: to return the differences as a sequence of strings
-* ++: to merge/concatenate two sets of differences (i.e. two Diffs instances)
+* _noDifference_: returns a boolean value indicating if the two paths contain differences or not
+* _toStrings_: returns the differences as a sequence of strings
+* _++_: merges/concatenates two sets of differences (i.e. two _Diffs_ instances)
 
-filesToStrings in the Diffs companion object is a small helper method used by toStrings.
+_filesToStrings_ in the _Diffs_ companion object is a small helper method used by _toStrings_.
 
 h2. QuickDiffArgs
 
-The QuickDiffArgs case class contains the arguments passed to the QuickDiff utily (typically via the command line). At the moment, it contains the following arguments:
+The _QuickDiffArgs_ case class contains the arguments passed to the QuickDiff utility (typically via the command line). At the moment, it contains the following arguments:
 
 * the source path
 * the destination path
 * the "check dates" mode flag
 * the "full diff" mode flag
 
-The case class itself only contains one method, toStrings, to return the arguments as a sequence of strings.
+The case class itself only contains one method, _toStrings_, which returns the arguments as a sequence of strings.
 
-The QuickDiffArgs companion objects contains the usage string and the parseArgs method which parses the arguments passed to QuickDiff and returns a QuickDiffArgs case class instance. It is a relatively short recursive method. Since QuickDiff accepts only a small set of options, it is quite convenient. If more options were to be added, a more robust argument-parsing library/framework might be needed.
+The _QuickDiffArgs_ companion objects contains the usage string and the _parseArgs_ method which parses the arguments passed to QuickDiff and returns a _QuickDiffArgs_ case class instance. It is a relatively short recursive method. Since QuickDiff accepts only a small set of options, it is quite convenient. If more options were to be added, a more robust argument-parsing library/framework might be needed.
 
 h2. QuickDiff
 
-This is the main case class / object in the project. The case class contains the general options ("check dates" and "full diff" modes) and the main method _
+This is the main case class / object in the project. The case class contains the general options ("check dates" and "full diff" modes) and the main method _diffs_ which is a recursive method computing the differences between two paths at the same level in the filesystem hierarchy.
+
+The _diffs_ method contains several local case classes:
+
+* _JavaFilePair_
+* _JavaFileListPair_
+
+Both are convenient containers of _java.io.File_ instances. The wording "Java file" is used to reference _java.io.File_ and to make it clear that we're not referencing actual files only (which are not directories, which _java.io.File_ can also represent). In other words, a "Java file" can be either a file or a directory in the filesystem.
+
+The _diffs_ method also contains several local sub-methods:
+
+* _commonJavaFilePairs_: returns a sequence of pairs of Java files that are present both in the source/destination sequences of Java files passed as arguments; the comparison is based on the short name of the Java files (_getName_ method)
+* _combineSubDiffs_: recursively calls _diffs_ on all the sub-directories and combine the different _Diffs_ instances using the _++_ method; this method stops at the first error (as soon as a recursive call to _diffs_ fails, i.e. returns a _Left_ instead of a _Right_)
+* _missingJavaFiles_: returns a sequence of missing Java files; this is used to compute the missing files/directories in the source/destination paths, so it's called four times, with different arguments; the word "base" is used to reference the path in which we want to detect missing files/directories and the word "reference" represents the "other" path (i.e. the destination path is the "base" path is the source path and vice versa); it's important to understand that this method returns _java.io.File_ instances of files/directories that don't exist
 
 h1. Future enhancements
 
-unit tests...
+* _QuickDiff.diffs_ must be split into several smaller parts to make it more readable; all the local case classes and sub-methods should probably be put elsewhere
+* _combineSubDiffs_ is quite complex and not very readable in its current form (recursive, double patter matching, etc.); something more imperative might even be more readable 
+* unit tests are missing; tests are currently done manually...
 
 
 
