@@ -1,0 +1,69 @@
+h1. Error management
+
+Several methods in the project return an _Either[String, T]_ instead of a _T_. By convention, in Scala, the left part of
+_Either_ is often used to return an error (_Throwable_, _String_, etc.). Then, different _Either[Error, T]_ values can
+be chained using _Either.RightProjection.flatMap_, _Either.RightProjection.map_, or, more simply, using for
+comprehensions.
+
+Example:
+
+bq. val eitherValue3 = for { val1 <- eitherValue1.right; val2 <- eitherValue2.right } yield doSomething(val1, val2)
+
+This way, error management can be deferred until the latest moment. To explicitly process errors, _Either.fold_ can be
+used.
+
+Example:
+
+bq. finalValue.fold(error => Console.err.println(error), value => ...)
+
+Or, using regular pattern matching:
+
+bq. finalValue match {
+bq.   case Left(error) => Console.err.println(error)
+bq.   case Right(value) => ...
+bq. }
+
+h1. General structure
+
+h2. Diffs
+
+The Diffs case class simply contains the differences between two paths grouped into several sub-groups (see README for
+a description of the sub-groups).
+
+It contains three small methods:
+
+* noDifference: to return a boolean value indicating if the two paths contain differences or not
+* toStrings: to return the differences as a sequence of strings
+* ++: to merge/concatenate two sets of differences (i.e. two Diffs instances)
+
+filesToStrings in the Diffs companion object is a small helper method used by toStrings.
+
+h2. QuickDiffArgs
+
+The QuickDiffArgs case class contains the arguments passed to the QuickDiff utily (typically via the command line). At
+the moment, it contains the following arguments:
+
+* the source path
+* the destination path
+* the "check dates" mode flag
+* the "full diff" mode flag
+
+The case class itself only contains one method, toStrings, to return the arguments as a sequence of strings.
+
+The QuickDiffArgs companion objects contains the usage string and the parseArgs method which parses the arguments
+passed to QuickDiff and returns a QuickDiffArgs case class instance. It is a relatively short recursive method. Since
+QuickDiff accepts only a small set of options, it is quite convenient. If more options were to be added, a more robust
+argument-parsing library/framework might be needed.
+
+h2. QuickDiff
+
+This is the main case class / object in the project. The case class contains the general options ("check dates" and
+"full diff" modes) and the main method _
+
+h1. Future enhancements
+
+unit tests...
+
+
+
+
