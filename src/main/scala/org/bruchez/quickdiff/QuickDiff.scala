@@ -53,7 +53,7 @@ case class QuickDiff(checkDates: Boolean = false, fullDiff: Boolean = false) {
 
       case class JavaFileListPair(src: List[File] = Nil, dst: List[File] = Nil)
 
-      // If "check date" mode enabled, check the date of the same-sized files
+      // If "check date" mode enabled, check the date of the same-size files
       val outOfDateFiles =
         if (checkDates) {
           sameSizeFilePairs.foldLeft(JavaFileListPair()) {
