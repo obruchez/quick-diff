@@ -1,22 +1,22 @@
 h1. Error management
 
-Several methods in the project return an _Either[String, T]_ instead of a _T_. By convention, in Scala, the left part of
-_Either_ is often used to return an error (_Throwable_, _String_, etc.). Then, different _Either[Error, T]_ values can
-be chained using _Either.RightProjection.flatMap_, _Either.RightProjection.map_, or, more simply, using for
+p. Several methods in the project return an _Either[String, T]_ instead of a _T_. By convention, in Scala, the left part
+of _Either_ is often used to return an error (_Throwable_, _String_, etc.). Then, different _Either[Error, T]_ values
+can be chained using _Either.RightProjection.flatMap_, _Either.RightProjection.map_, or, more simply, using for
 comprehensions.
 
-Example:
+p. Example:
 
 bc. val eitherValue3 = for { val1 <- eitherValue1.right; val2 <- eitherValue2.right } yield doSomething(val1, val2)
 
-This way, error management can be deferred until the latest moment. To explicitly process errors, _Either.fold_ can be
-used.
+p. This way, error management can be deferred until the latest moment. To explicitly process errors, _Either.fold_ can
+be used.
 
-Example:
+p. Example:
 
 bc. finalValue.fold(error => Console.err.println(error), value => ...)
 
-Or, using regular pattern matching:
+p. Or, using regular pattern matching:
 
 bc.. finalValue match {
    case Left(error) => Console.err.println(error)
