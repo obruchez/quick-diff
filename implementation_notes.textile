@@ -28,7 +28,7 @@ The _Diffs_ case class simply contains the differences between two paths grouped
 It contains three small methods:
 
 * _noDifference_: returns a boolean value indicating if the two paths contain differences or not
-* _toStrings_: returns the differences as a sequence of strings
+* _toStrings_: returns the differences as a sequence of human-readable strings
 * _++_: merges/concatenates two sets of differences (i.e. two _Diffs_ instances)
 
 _filesToStrings_ in the _Diffs_ companion object is a small helper method used by _toStrings_.
@@ -42,7 +42,7 @@ The _QuickDiffArgs_ case class contains the arguments passed to the QuickDiff ut
 * the "check dates" mode flag
 * the "full diff" mode flag
 
-The case class itself only contains one method, _toStrings_, which returns the arguments as a sequence of strings.
+The case class itself only contains one method, _toStrings_, which returns the arguments as a sequence of human-readable strings.
 
 The _QuickDiffArgs_ companion objects contains the usage string and the _parseArgs_ method which parses the arguments passed to QuickDiff and returns a _QuickDiffArgs_ case class instance. It is a relatively short recursive method. Since QuickDiff accepts only a small set of options, it is quite convenient. If more options were to be added, a more robust argument-parsing library/framework might be needed.
 
