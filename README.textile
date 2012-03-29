@@ -1,0 +1,20 @@
+h1. Name
+
+QuickDiff - quickly find differences between two directories
+
+h1. Synopsis
+
+QuickDiff [--check-dates] [--full-diff] src-path dst-path
+
+h1. Description
+
+...
+
+h2. Options
+
+...
+
+h1. To-do
+
+* add option to enable recursion
+* implement full diff mode
