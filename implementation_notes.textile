@@ -59,7 +59,7 @@ Both are convenient containers of _java.io.File_ instances. The wording "Java fi
 
 The _diffs_ method also contains several local sub-methods:
 
-* _commonJavaFilePairs__: returns a sequence of pairs of Java files that are present both in the source/destination sequences of Java files passed as arguments; the comparison is based on the short name of the Java files (_getName_ method)
+* _commonJavaFilePairs_: returns a sequence of pairs of Java files that are present both in the source/destination sequences of Java files passed as arguments; the comparison is based on the short name of the Java files (_getName_ method)
 * _combineSubDiffs_: recursively calls _diffs_ on all the common sub-directories and combine the different _Diffs_ instances using the _++_ method; this method stops at the first error (as soon as a recursive call to _diffs_ fails, i.e. returns a _Left_ instead of a _Right_)
 * _missingJavaFiles_: returns a sequence of missing Java files; this is used to compute the missing files/directories in the source/destination paths, so it's called four times, with different arguments; the word "base" is used to reference the path in which we want to detect missing files/directories and the word "reference" represents the "other" path (i.e. the destination path if the "base" path is the source path and vice versa); it's important to understand that this method returns _java.io.File_ instances of files/directories that don't exist
 
