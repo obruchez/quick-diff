@@ -1,6 +1,6 @@
 h1. Name
 
-QuickDiff - quickly find differences between two directories
+QuickDiff - quickly find differences between two directories.
 
 h1. Synopsis
 
