@@ -1,6 +1,6 @@
 # quick-diff
 
-[![Build Status](https://travis-ci.org/obruchez/quick-diff.svg?branch=master)](https://travis-ci.org/obruchez/quick-diff)
+[![Scala CI](https://github.com/obruchez/quick-diff/actions/workflows/scala.yml/badge.svg)](https://github.com/obruchez/quick-diff/actions/workflows/scala.yml)
 
 Quickly find differences between two directories.
 

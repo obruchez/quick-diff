@@ -4,7 +4,9 @@ import java.io.File
 
 // @todo implement "full diff" mode
 
-/** This case class represents the general context in which two directories can be compared (using the diffs method) */
+/** This case class represents the general context in which two directories can be compared (using
+  * the diffs method)
+  */
 case class QuickDiff(checkDates: Boolean = false, fullDiff: Boolean = false) {
 
   /** @return the differences between two directories */
@@ -15,7 +17,10 @@ case class QuickDiff(checkDates: Boolean = false, fullDiff: Boolean = false) {
 
     case class JavaFilePair(src: File, dst: File)
 
-    /** @return Java files that are present in both the source and destination sequences (name-based comparison) */
+    /** @return
+      *   Java files that are present in both the source and destination sequences (name-based
+      *   comparison)
+      */
     def commonJavaFilePairs(srcJavaFiles: Seq[File], dstJavaFiles: Seq[File]): Seq[JavaFilePair] =
       for {
         srcJavaFile <- srcJavaFiles
@@ -29,7 +34,8 @@ case class QuickDiff(checkDates: Boolean = false, fullDiff: Boolean = false) {
     @scala.annotation.tailrec
     def combineSubDiffs(
         subDirectoryPairs: List[JavaFilePair],
-        errorOrCurrentDiffs: Either[String, Diffs] = Right(Diffs())): Either[String, Diffs] =
+        errorOrCurrentDiffs: Either[String, Diffs] = Right(Diffs())
+    ): Either[String, Diffs] =
       errorOrCurrentDiffs match {
         // Stop at first error
         case Left(error) => Left(error)
@@ -42,8 +48,10 @@ case class QuickDiff(checkDates: Boolean = false, fullDiff: Boolean = false) {
             case subDirectoryPair :: otherSubDirectoryPairs =>
               combineSubDiffs(
                 otherSubDirectoryPairs,
-                diffs(new File(srcDir, subDirectoryPair.src.getName),
-                      new File(dstDir, subDirectoryPair.dst.getName)).right.map(_ ++ currentDiffs)
+                diffs(
+                  new File(srcDir, subDirectoryPair.src.getName),
+                  new File(dstDir, subDirectoryPair.dst.getName)
+                ).right.map(_ ++ currentDiffs)
               )
           }
       }
@@ -83,14 +91,20 @@ case class QuickDiff(checkDates: Boolean = false, fullDiff: Boolean = false) {
           JavaFileListPair()
         }
 
-      /** @return Java files that should be present in the base parent directory but that are missing */
-      def missingJavaFiles(baseParentDirectory: File,
-                           referenceJavaFiles: Seq[File],
-                           commonJavaFilePairs: Seq[JavaFilePair],
-                           commonJavaFilePairToReferenceJavaFile: JavaFilePair => File): Seq[File] =
+      /** @return
+        *   Java files that should be present in the base parent directory but that are missing
+        */
+      def missingJavaFiles(
+          baseParentDirectory: File,
+          referenceJavaFiles: Seq[File],
+          commonJavaFilePairs: Seq[JavaFilePair],
+          commonJavaFilePairToReferenceJavaFile: JavaFilePair => File
+      ): Seq[File] =
         referenceJavaFiles filterNot { referenceJavaFile =>
           commonJavaFilePairs exists { commonJavaFilePair =>
-            commonJavaFilePairToReferenceJavaFile(commonJavaFilePair).getName == referenceJavaFile.getName
+            commonJavaFilePairToReferenceJavaFile(
+              commonJavaFilePair
+            ).getName == referenceJavaFile.getName
           }
         } map { referenceJavaFile =>
           new File(baseParentDirectory, referenceJavaFile.getName)
@@ -139,7 +153,10 @@ object QuickDiff {
           // Validate source/destination paths and compute the differences between the two paths
           val diffsEither = for {
             srcFile <- directoryPathOptionAsFile(quickDiffArgs.srcPath, "Missing source path").right
-            dstFile <- directoryPathOptionAsFile(quickDiffArgs.dstPath, "Missing destination path").right
+            dstFile <- directoryPathOptionAsFile(
+              quickDiffArgs.dstPath,
+              "Missing destination path"
+            ).right
             diffs <- QuickDiff(quickDiffArgs.checkDates, quickDiffArgs.fullDiff)
               .diffs(srcFile, dstFile)
               .right
@@ -165,8 +182,10 @@ object QuickDiff {
   }
 
   /** Validate a directory path and return a File instance in case of success */
-  private def directoryPathOptionAsFile(pathOption: Option[String],
-                                        emptyPathError: String): Either[String, File] = {
+  private def directoryPathOptionAsFile(
+      pathOption: Option[String],
+      emptyPathError: String
+  ): Either[String, File] = {
     pathOption map { path =>
       val directoryAsFile = new File(path)
       if (directoryAsFile.isDirectory) {
